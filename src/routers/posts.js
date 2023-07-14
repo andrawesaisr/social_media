@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Auth = require("../middlewares/Auth");
 const Post = require("../models/posts");
-const User=require('../models/users')
+const User = require("../models/users");
 
 // CREATE
 router.post("/create", Auth, async (req, res) => {
@@ -106,14 +106,14 @@ router.get("/get/:id", Auth, async (req, res) => {
 // GET TIMELINE POSTS
 router.get("/getAll", Auth, async (req, res) => {
   try {
-    const allPosts=[]
+    const allPosts = [];
     const myposts = await Post.find({});
-    allPosts.push(myposts)
-    req.user.following.every(async (e)=>{
-      const user= await User.findOne({username: e})
-      const posts=await Post.find({userId:user._id})
-      allPosts.push(posts)
-    })
+    allPosts.push(myposts);
+    req.user.following.every(async (e) => {
+      const user = await User.findOne({ username: e });
+      const posts = await Post.find({ userId: user._id });
+      allPosts.push(posts);
+    });
     res.status(200).send(allPosts);
   } catch (e) {
     console.log(e);
